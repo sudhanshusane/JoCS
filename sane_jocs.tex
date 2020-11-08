@@ -1,6 +1,115 @@
 \documentclass[review]{elsarticle}
 
+
+\usepackage{microtype}                 % use micro-typography (slightly more compact, better to read)
+\PassOptionsToPackage{warn}{textcomp}  % to address font issues with \textrightarrow
+\usepackage{textcomp}                  % use better special symbols
+\usepackage{mathptmx}                  % use matching math font
+\usepackage{times}                     % we use Times as the main font
+\usepackage{enumitem}
+\renewcommand*\ttdefault{txtt}         % a nicer typewriter font
+\usepackage{cite}                      % needed to automatically sort the references
+\usepackage{tabu}                      % only used for the table example
+\usepackage{booktabs}                  % only used for the table example
+\usepackage{amsfonts}
+\usepackage{framed}
 \usepackage{lineno,hyperref}
+\newcommand{\fix}[1]{\textcolor{red}{\textbf{\textit{#1}}}}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{L}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\usepackage[dvipsnames]{xcolor,colortbl}
+\newcommand{\mc}[2]{\multicolumn{#1}{c}{#2}}
+\definecolor{Gray}{gray}{0.85}
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+\definecolor{LightRed}{rgb}{1,0.88,1}
+
+\newcolumntype{a}{>{\columncolor{Gray}}c}
+\newcolumntype{b}{>{\columncolor{LightCyan}}c}
+\newcolumntype{d}{>{\columncolor{LightRed}}c}
+
+\usepackage[subrefformat=parens,labelformat=parens]{subcaption}
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage{collcell}
+
+\newenvironment{tightEnumerate}{
+\begin{enumerate}
+        \setlength{\itemsep}{1pt}
+        \setlength{\parskip}{0pt}
+        \setlength{\parsep}{0pt}
+}{\end{enumerate}
+}
+
+\newenvironment{tightItemize}{
+\begin{itemize}
+        \setlength{\itemsep}{1pt}
+        \setlength{\parskip}{0pt}
+        \setlength{\parsep}{0pt}
+}{\end{itemize}
+}
+
+\newcommand*{\MinNumberR}{0.0}%
+\newcommand*{\MaxNumberR}{20}
+\newcommand{\ApplyGradientR}[1]{%
+        \pgfmathsetmacro{\PercentColor}{100.0*(#1-\MinNumberR)/(\MaxNumberR-\MinNumberR)}
+        \hspace{-0.33em}\colorbox{red!\PercentColor!white}{#1}
+}
+
+\newcolumntype{R}{>{\collectcell\ApplyGradientR}c<{\endcollectcell}}
+
+
+
+\newcommand*{\MinNumberD}{0}%
+\newcommand*{\MaxNumberD}{100}
+\newcommand{\ApplyGradientD}[1]{%
+        \pgfmathsetmacro{\PercentColor}{100.0*(#1-\MinNumberD)/(\MaxNumberD-\MinNumberD)}
+        \hspace{-0.33em}\colorbox{red!\PercentColor!white}{#1}
+}
+
+\newcolumntype{D}{>{\collectcell\ApplyGradientD}c<{\endcollectcell}}
+
+
+
+\newcommand*{\MinNumberA}{0.0}%
+\newcommand*{\MaxNumberA}{0.08}
+\newcommand{\ApplyGradientA}[1]{%
+        \pgfmathsetmacro{\PercentColor}{100.0*(#1-\MinNumberA)/(\MaxNumberA-\MinNumberA)}
+        \hspace{-0.2em}\vspace{-0.05em}\colorbox{orange!\PercentColor!white}{#1}
+}
+
+\newcolumntype{A}{>{\collectcell\ApplyGradientA}c<{\endcollectcell}}
+
+
+\newcommand*{\MinNumberB}{0.0}%
+\newcommand*{\MaxNumberB}{10.0}
+\newcommand{\ApplyGradientB}[1]{%
+        \pgfmathsetmacro{\PercentColor}{100.0*(#1-\MinNumberB)/(\MaxNumberB-\MinNumberB)}
+        \hspace{-0.2em}\colorbox{orange!\PercentColor!white}{#1}
+}
+
+\newcolumntype{B}{>{\collectcell\ApplyGradientB}c<{\endcollectcell}}
+
+
+\newcommand*{\MinNumberC}{0.0}%
+\newcommand*{\MaxNumberC}{0.44}
+\newcommand{\ApplyGradientC}[1]{%
+        \pgfmathsetmacro{\PercentColor}{100.0*(#1-\MinNumberC)/(\MaxNumberC-\MinNumberC)}
+        \hspace{-0.2em}\colorbox{orange!\PercentColor!white}{#1}
+}
+
+\newcolumntype{C}{>{\collectcell\ApplyGradientC}c<{\endcollectcell}}
+
+
+\newcommand*{\MinNumberN}{0.0}%
+\newcommand*{\MaxNumberN}{0.75}
+\newcommand{\ApplyGradientN}[1]{%
+        \pgfmathsetmacro{\PercentColor}{100.0*(#1-\MinNumberN)/(\MaxNumberN-\MinNumberN)}
+        \hspace{-0.33em}\colorbox{red!\PercentColor!white}{#1}
+}
+
+\newcolumntype{N}{>{\collectcell\ApplyGradientN}c<{\endcollectcell}}
+
+
 \modulolinenumbers[5]
 
 \journal{Journal of \LaTeX\ Templates}
@@ -72,40 +181,8 @@ in situ processing, high-performance computing, vector fields, data reduction
 
 \linenumbers
 
-\section{The Elsevier article class}
-
-\paragraph{Installation} If the document class \emph{elsarticle} is not available on your computer, you can download and install the system package \emph{texlive-publishers} (Linux) or install the \LaTeX\ package \emph{elsarticle} using the package manager of your \TeX\ installation, which is typically \TeX\ Live or Mik\TeX.
-
-\paragraph{Usage} Once the package is properly installed, you can use the document class \emph{elsarticle} to create a manuscript. Please make sure that your manuscript follows the guidelines in the Guide for Authors of the relevant journal. It is not necessary to typeset your manuscript in exactly the same way as an article, unless you are submitting to a camera-ready copy (CRC) journal.
-
-\paragraph{Functionality} The Elsevier article class is based on the standard article class and supports almost all of the functionality of that class. In addition, it features commands and options to format the
-\begin{itemize}
-\item document style
-\item baselineskip
-\item front matter
-\item keywords and MSC codes
-\item theorems, definitions and proofs
-\item lables of enumerations
-\item citation style and labeling.
-\end{itemize}
-
-\section{Front matter}
-
-The author names and affiliations could be formatted in two ways:
-\begin{enumerate}[(1)]
-\item Group the authors per affiliation.
-\item Use footnotes to indicate the affiliations.
-\end{enumerate}
-See the front matter of this document for examples. You are recommended to conform your choice to the journal you are submitting to.
-
-\section{Bibliography styles}
-
-There are various bibliography styles available. You can select the style of your choice in the preamble of this document. These styles are Elsevier styles based on standard styles like Harvard and Vancouver. Please use Bib\TeX\ to generate your bibliography and include DOIs whenever available.
-
-Here are two sample references: \cite{Feynman1963118,Dirac1953888}.
-
-%\section*{References}
-
+\section{Introduction}
+\input{outline.tex}
 \bibliography{sane_jocs}
 
 \end{document}
