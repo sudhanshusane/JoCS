@@ -1,0 +1,46 @@
+\begingroup
+\setlength{\tabcolsep}{-0.8pt}
+%\renewcommand{\arraystretch}{1.05} % Default value: 1
+\begin{table*}
+\centering
+\begin{tabular}{|P{1.7cm}|P{1.3cm}|P{1.7cm}|P{1.3cm} C P{1.3cm}|P{7cm}|}
+\hline
+Technique & Interval & Reduction & Data & Avg$_{L2}$ & Cell & \multirow{2}{*}{Scatter Plot} \\
+& & & (MB) & & Side \% & \\
+\cline{1-7}
+\multirow{4}{*}{Eulerian} & 25 & \multirow{4}{*}{Full Res} & 227 & 0.010 & 2.27 & \multirow{16}{*}{\includegraphics[width=0.95\linewidth]{images/nyx_accuracy.pdf}} \\
+\cline{2-2}%\cline{4-6}
+& 50 & & 120 & 0.037 & 8.4 &  \\
+\cline{2-2}%\cline{4-6}
+& 100 & & 67 & 0.090 & 20.45 & \\
+\cline{2-2}%\cline{4-6}
+& 200 & & 40 & 0.265 & 60.22 & \\
+\cline{1-6}
+\multirow{12}{*}{Lagrangian} & \multirow{3}{*}{25} & 1:1 & 232 & 0.051 & 11.61 & \\
+%\cline{3-3}
+& & 1:8 & 27 & 0.164 & 37.27 &  \\
+%\cline{3-3}
+& & 1:27 & 8 & 0.320 & 72.72 &  \\
+\cline{2-6}
+& \multirow{3}{*}{50} & 1:1 & 166 & 0.059 & 13.40 & \\
+%\cline{3-3}
+& & 1:8 & 14 & 0.153 & 34.77 &  \\
+%\cline{3-3}
+& & 1:27 & 4 & 0.256 & 58.18 &  \\
+\cline{2-6}
+& \multirow{3}{*}{100} & 1:1 & 58 & 0.067 & 15.22 &  \\
+%\cline{3-3}
+& & 1:8 & 7 & 0.159 & 36.13 &  \\
+%\cline{3-3}
+& & 1:27 & 2 & 0.261 & 59.31 & \\
+\cline{2-6}
+ & \multirow{3}{*}{200} & 1:1 & 29 & 0.103 & 23.40 &  \\
+%\cline{3-3}
+& & 1:8 & 3.4 & 0.204 & 46.36 & \\
+%\cline{3-3}
+& & 1:27 & 1 & 0.321 & 72.95 &  \\
+\hline
+\end{tabular}
+\caption{Nyx Accuracy results}
+\end{table*}
+\endgroup

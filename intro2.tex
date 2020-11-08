@@ -1,0 +1,217 @@
+
+Flow visualization is an important sub-area of scientific visualization for
+understanding vector field data.
+%
+Most flow visualization techniques involve placing massless particles at seed positions
+and displacing them according to the vector field,
+whether for animating particles, plotting the entire trajectory at once (streamlines/pathlines),
+or using particle trajectories as building blocks for other techniques (e.g., finite-time Lyapunov exponents).
+%
+Most often, the movements of particles are calculated by solving an ordinary differential equation, typically
+with a Runge-Kutta algorithm~\cite{cash1990variable}.
+%
+%The accuracy of this solution is well studied and has been generally deemed as acceptable for
+%flow visualization techniques.
+%
+%That said, 
+Algorithms like Runge-Kutta require evaluating the velocity field at multiple locations;
+the popular fourth order algorithm (RK4) requires evaluation at four locations.
+%
+When dealing with steady-state flow, the velocity field evaluations can be performed accurately,
+with error typically only arising from interpolation within a cell of a mesh.
+%
+However, when dealing with unsteady-state flow, accurate velocity field evaluations can be 
+%much more difficult 
+harder to achieve.
+
+The primary problem with accurate velocity field evaluation for unsteady-state flow 
+is that computational simulations are unable to store full spatio-temporal data.
+%
+These simulations often advance in ``cycles.''
+%
+During a cycle, the simulation advances from its current time, $T$, to a new time, $T+\epsilon$.
+%
+%The simulation does this by solving equations and applying their solutions to update the values of fields on its mesh.
+%
+Simulations run for many cycles, from thousands to hundreds of thousands.
+%
+%Simulations run for thousands to hundreds of thousands of cycles.
+%
+Saving simulation state to disk often is very costly, both in the time to interact with the I/O system and in
+storage costs (bytes).
+%
+%Further, the values of the fields often change by only small amounts from one cycle to the next.
+%
+In response, simulations almost uniformly practice ``temporal subsampling,''
+meaning that they save data from only a subset of their cycles to disk.
+%
+%\fix{New sentence from Hank:}
+With respect to unsteady-state flow, this means that velocity field evaluation must
+do temporal interpolation; further, as fewer and fewer cycles are stored, these interpolations
+are increasingly inaccurate, introducing increasing error into flow visualizations.
+
+%The methods for temporal subsampling vary, but common practices include saving one out of every $N$
+%cycles or saving after some amount of time elapses.
+
+With this work, we consider a class of flow visualization problems with three properties:
+\begin{tightEnumerate}
+\item The flow visualization is exploratory, i.e., the desired particle trajectories will 
+be specified by a domain scientist during an interactive visualization session after the simulation completes.  
+As a result, the desired particle trajectories are not known while the simulation is running.
+\item The flow visualization needs to consider unsteady-state flow (the vector field data from one cycle will not suffice).
+\item The simulation is saving data to disk at a low rate, i.e., sparse temporal subsampling.
+\end{tightEnumerate}
+%
+We refer to this as an \textbf{EUS} problem: 
+\textbf{E}xploratory analysis
++ 
+\textbf{U}nsteady-state flow 
++ 
+\textbf{S}parse temporal subsampling.
+%
+We note that removing any of these three properties simplifies the problem substantially:
+\textbf{US} can calculate particle trajectories \textit{in situ} while the simulation is running,
+\textbf{ES} does not require inferring velocity field values between cycles, 
+and
+\textbf{EU} can infer velocities between time slices (reasonably) accurately.
+
+\textbf{EUS} problems have occurred more often on supercomputers in recent years.
+%
+Over the last decade, the ability to generate data on supercomputers has gone up by $\sim$100X, 
+but I/O capabilities have gone up by $\sim$10X.
+%ability to store and load data on supercomputers has gone up by only $\sim$10X.
+%
+As a result, simulations must the reduce proportion of the data they store, 
+often creating \textbf{S}parse temporal sampling.
+%
+Additionally, 
+while supercomputers are a major motivator for considering \textbf{EUS} problems,
+these problems also are important in non-supercomputing environments.
+
+\textit{In situ} processing~\cite{ma2009situ, bauer2016situ}
+is an important approach for addressing the ``I/O bottleneck.''
+%
+Most typically, 
+\textit{in situ} processing utilizes 
+\textit{a priori} knowledge of which visualizations and analyses to complete.
+%
+However, 
+this \textit{in situ} style is not congruent with the \textbf{E}xploratory component of \textbf{EUS} problems.
+%
+Fortunately, an alternate worklow avoids the need for \textit{a priori} knowledge,
+by using 
+a combination of \textit{in situ} and \textit{post hoc} processing~\cite{JSFI78}.
+%
+In the \textit{in situ} phase, 
+data is transformed and reduced so that it is small enough to be saved to
+disk.
+%
+In the \textit{post hoc} phase, this data is used to perform
+exploratory visualization.
+%
+In the context of flow visualization, this means that \textit{in situ} processing should transform
+and reduce time-varying vector field data such that \textit{post hoc} exploration can use the result to
+infer arbitrary particle trajectories ---
+ideally with high accuracy and requiring little data storage, among
+other properties.
+
+An important consideration with this \textit{in situ} + \textit{post hoc} workflow is how to transform and reduce data.
+%
+For our work, we transform/reduce spatio-temporal vector data using a Lagrangian 
+approach.
+%
+This choice enables data from all cycles of a simulation to be represented,
+which is fundamentally different than the traditional choice of saving time slices.
+%
+We refer to this Lagrangian-based workflow as \textbf{L-ISR-PHE}: \textbf{L}agrangian-based \textbf{I}n \textbf{S}itu \textbf{R}eduction with
+\textbf{P}ost \textbf{H}oc \textbf{E}xploration.
+
+Agranovsky et al.~\cite{agranovsky2014improved} performed the seminal study on applying 
+\textbf{L-ISR-PHE} to the \textbf{EUS} problem, but their study left significant questions.
+%
+In particular, while their work demonstrated promising accuracy-storage tradeoffs,
+their work failed to seriously consider whether the approach could be practically deployed.
+%
+Further, follow-on studies have also not considered practical deployment, instead focusing
+on better understanding accuracy-storage tradeoffs or improving \textit{post hoc} interpolation.
+%
+As a result, a significant open question is whether the \textbf{L-ISR-PHE} approach is practical.
+%
+The open nature of this question has hindered both follow-on research and widespread adoption.
+%
+%Our study addresses this gap.
+
+
+The contribution of this paper is an empirical study on 
+the \textbf{L-ISR-PHE} workflow to the \textbf{EUS} problem.
+%
+It considers \textbf{L-ISR-PHE} holistically: considering evaluation criteria at each phase of processing,
+defining metrics to measure these criteria, defining workloads of interest, and then evaluating
+the workloads and metrics in a large study.
+%
+One highlight of our study is that it is the first
+to evaluate the encumbrance placed on a simulation code during \textit{in situ} reduction.
+%
+Of note, all previous studies ran in ``theoretical'' in situ environments, meaning that
+they loaded data sets from disk, rather than truly integrated with a simulation code.
+%
+Another highlight is that our study provides detailed quantitative evaluations of the extracted 
+Lagrangian data, as well as an estimate of costs for distributed 
+memory \textit{post hoc} reconstruction.
+%
+Previous studies have failed to consider the distribution of outcomes when inferring new particle trajectories,
+instead focusing on average behavior.
+%
+In all, our empirical study provides
+the most clear evidence to date that \textbf{L-ISR-PHE} is viable and 
+should be the preferred solution for most \textbf{EUS} problems.
+%
+%Our study considers  three diverse simulation codes running on a top supercomputer, with experiments calculating over 76M particle trajectories using up to $384$ GPUs.
+%
+
+
+%Paragraph 2: LB-ISE-PHE is a solution to the E-TVVD-STS problem.
+%
+%Paragraph 3: Although some preliminary studies have shown the promise
+%of LB-ISE-PHE for the E-TVVD-STS problem in a theoretical in situ
+%environment, a major motivation for the technique is in a large-scale
+%supercomputing environment with actual in situ runs.
+%%
+%This has never been done, but is critical to establishing the viability
+%of the LB-ISE-PHE solution to the E-TVVD-STS problem.  And we do that here.
+%
+%important issues remain open 
+%(e.g., in situ emcumbrance, actually done real world in situ).
+%
+%With this work, we perform an empirical study of the LB-ISE-PHE approach
+%to the E-TVVD-STS problem.
+%
+%We consider issues in depth that have been ignored in previous works, specifically
+ %in situ encumbrance, etc.
+%
+
+%Paragraph 4:
+%The result of this study is to demonstrate that stakeholders with the E-TVVD-STS
+%problem should be employing the LB-ISE-PHE in almost all cases.
+%
+%How does it differ going from a theoretical in situ environment to a real-world
+%in situ environment?:
+%- can measure percentage of run-time (which involves both particle advection
+%time and simulation cycle time)
+%- the invocation (not best word) of particle advection differs when constrained
+%to operate in situ
+%- real world I/O output
+%- memory concerns
+%- data generated is large, and requires parallel post hoc
+%
+%If you have problem E-TVVD-STS, then you want solution LB-ISE-PHE.
+%
+%Then the Lagrangian-based in situ extraction + post hoc exploration is for you!
+%
+%
+%
+%in situ Lagrangian analysis
+%time-varying vector data
+%post hoc exploration
+%
+%With this study, we contribute an empirical study of 

@@ -1,0 +1,27 @@
+\begin{table*}[!h]
+\centering
+%\resizebox{\linewidth}{!}{%
+\scalebox{0.8}{
+\begin{tabular}{||c||c|c|c||c|c||b|c|d|b||}
+\hline
+\textbf{Configuration} & \textbf{Average File Size} & \textbf{Average I/O} & \textbf{Total I/O} & \textbf{Average Filter} & \textbf{Total Filter} & \textbf{Total In Situ} & \textbf{Simulation Time} & \textbf{\% DAV} & \textbf{Memory/Rank} \\
+\hline
+Eulerian 25 & 13.4 MB & 6.5s & 110.63s & NA & NA & 110.63s & 4498.7s & 2.46\% & NA \\
+\hline
+Lagrangian 25, 1:1 & 14.5 MB & 8.49s & 135.96s & 0.0131s & 5.27s & 141.23s & 4308.4s & 3.27\% & 6.6 MB \\
+\hline
+Lagrangian 25, 1:8 & 1.7 MB & 0.98s & 15.7s & 0.0033s & 1.35s & 17.05s & 4452.8s & 0.38\% & 0.78 MB \\
+\hline
+Lagrangian 25, 1:27 & 0.48 MB & 0.29s & 4.65s & 0.0027s & 1.1s & 5.75s & 4438.9s & 0.12\% & 0.22 MB \\
+\hline
+Lagrangian 50, 1:1 & 14.5 MB & 8.54s & 68.37s & 0.0132s & 5.29s & 73.66s & 4499s & 1.63\% & 6.6 MB \\
+\hline
+Lagrangian 50, 1:8 & 1.7 MB & 0.97s & 7.81s & 0.0036s & 1.45s & 9.26s & 4566.3s & 0.20\% & 0.78 MB \\
+\hline
+Lagrangian 50, 1:27 & 0.48 MB & 0.28s & 2.3s & 0.0025s & 1.01s & 3.31s & 4523.7s & 0.07\% & 0.22 MB \\
+\hline
+\end{tabular}
+}
+\caption{Nyx$_{Small}$ data set - $65^3$ grid. Each of these experiment configurations was executed for 400 cycles. The approximate time per simulation cycle is 10s. For these experiment configurations, each Lagrangian step costs less than 0.02\% of the simulation cycle. A single node operates on 274,625 grid points.}
+\label{nyx_64_table}
+\end{table*}

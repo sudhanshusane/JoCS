@@ -1,0 +1,56 @@
+== Intro ==
+EUS problems
+ISR+PHE
+There is a Lagrangian-approach, but no details.
+
+== Background ==
+
+2.1 The L-ISR-PHE Workflow
+
+Theoretical
+Intuition
+
+2.2 Research on in situ data reduction
+
+2.3 Research on PHE Lagrangian 
+
+2.4 Other Relevant Research
+
+== 3: Title ==
+
+What is the space of an empirical study?
+
+Three factors:
+1) evaluation metrics
+2) instantiations of L-ISR-PHE
+3) workloads
+
+3.1: Evaluation Areas
+3.1.1: ISR
+IS-E1: memory usage
+IS-E2: execution time
+IS-E3: ease of integration
+3.1.2: DS
+DS-E1: file size
+DS-E2: file format
+DS-E3: file write/read time
+3.1.3: PHE
+PH-E1: memory usage 
+PH-E2: execution time
+PH-E3: accuracy
+
+3.2: instantiations
+There are many possible instantiations.  With this study, we chose current
+best practices.
+We intend for future research on improved instantiations to revisit
+our evaluations (or similar ones) to establish that they have improved
+on best practices.
+3.2.1: ISR
+BTO
+3.2.2: DS
+our own file format
+3.2.3: PHE
+BTO
+
+
+

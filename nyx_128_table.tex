@@ -1,0 +1,27 @@
+\begin{table*}[!h]
+\centering
+%\resizebox{\linewidth}{!}{%
+\scalebox{0.8}{
+\begin{tabular}{||c||c|c|c||c|c||b|c|d|b||}
+\hline
+\textbf{Configuration} & \textbf{Average File Size} & \textbf{Average I/O} & \textbf{Total I/O} & \textbf{Average Filter} & \textbf{Total Filter} & \textbf{Total In Situ} & \textbf{Simulation Time} & \textbf{\% DAV} & \textbf{Memory/Rank} \\
+\hline
+Eulerian 25 & 101 MB & 48.8s & 146.4s & NA & NA & 146.39s & 6746.3s & 2.17\% & NA \\
+\hline
+Lagrangian 25, 1:1 & 110 MB & 65s & 195s & 0.0592s & 4.44s & 199.45s & 6820.4s & 2.92\% & 51.5 MB \\
+\hline
+Lagrangian 25, 1:8 & 14 MB & 8s & 24.2s & 0.0102s & 0.76s & 25s & 6676s & 0.37\% & 6.3 MB \\
+\hline
+Lagrangian 25, 1:27 & 4 MB & 2.36s & 7s & 0.0044s & 0.33s & 7.42s & 6639.4s & 0.11\% & 0.78 MB \\
+\hline
+Lagrangian 50, 1:1 & 109 MB & 65.86s & 65.86s & 0.0600s & 3.00s & 68.86s & 4487.8s & 1.53\% & 51.5 MB \\
+\hline
+Lagrangian 50, 1:8 & 14 MB & 8.21s & 8.21s & 0.0100s & 0.50s & 8.71s & 4421.3s & 0.19\% & 6.3 MB \\
+\hline
+Lagrangian 50, 1:27 & 4 MB & 2.33s & 2.33s & 0.0044s & 0.22s & 2.56s & 4412.5s & 0.05\% & 0.78 MB \\
+\hline
+\end{tabular}
+}
+\caption{Nyx$_{Medium}$ data set - $129^3$ grid. This simulation completed 75 cycles in 2 hours. For the experiment configurations with interval 25, we ran the simulation until cycle 75. For the experiment configurations with interval 50, we ran the simulation until cycle 50, i.e., a single interval. A single node operates on approximately 2.1M points. }
+\label{nyx_128_table}
+\end{table*}

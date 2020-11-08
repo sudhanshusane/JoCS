@@ -1,0 +1,24 @@
+\begingroup
+\setlength{\tabcolsep}{0pt}
+%\renewcommand{\arraystretch}{0.55} % Default value: 1
+%\setlength{\fboxsep}{1mm}
+\begin{table}
+\centering
+\begin{tabular}{|P{1.7cm}|P{1.3cm}|P{1.4cm} P{1.8cm} N|P{1.4cm}|}
+\hline
+Dimensions & Particles & Step & Simulation & DAV\% & Memory \\
+& & & Cycle Time & & \\ 
+\hline
+\multirow{3}{*}{$65^3$} & 274k & 0.0122 & \multirow{3}{*}{10.9} & 0.1119 & 6.8 MB \\
+& 32k & 0.0033 & & 0.0302 & 0.8 MB \\ 
+& 9k & 0.0025 & & 0.0229 & 0.2 MB \\
+\hline
+\multirow{3}{*}{$129^3$} & 2.1M & 0.0596 & \multirow{3}{*}{88.3} & 0.0674 & 53.6 MB \\
+& 262k & 0.0101 & & 0.0114 & 6.5 MB \\
+& 32k & 0.0044 & & 0.0049 & 0.8 MB \\ 
+\hline
+\end{tabular}
+\caption{Nyx in situ encumbrance.}
+\label{table:nyx_timings}
+\end{table}
+\endgroup

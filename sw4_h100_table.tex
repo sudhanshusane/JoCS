@@ -1,0 +1,21 @@
+\begin{table*}[!h]
+\centering
+%\resizebox{\linewidth}{!}{%
+\scalebox{0.8}{
+\begin{tabular}{||c||c|c|c||c|c||b|c|d|b||}
+\hline
+\textbf{Configuration} & \textbf{Average File Size} & \textbf{Average I/O} & \textbf{Total I/O} & \textbf{Average Filter} & \textbf{Total Filter} & \textbf{Total In Situ} & \textbf{Simulation Time} & \textbf{\% DAV} & \textbf{Memory/Rank} \\
+\hline
+Eulerian 200 &  MB & s & s & NA & NA & s & s & \% & NA \\
+\hline
+Lagrangian 200, 1:8 & 4.5 MB & 3.33s & 43.4s & 0.0798s & 207.64s & 251s & 3406s & 7.37\% & 2.2 MB \\
+\hline
+Lagrangian 200, 1:27 & 1.3 MB & 0.99s & 12.9s & 0.0295s & 76.7s & 89.7s & 3962s & 2.26\% & 0.64 MB \\
+\hline
+Lagrangian 200, 1:64 & 0.5 MB & 0.44s & 5.73s & 0.0194s & 50.59s & 56.3s & 4218s & 1.33\% & 0.26 MB \\
+\hline
+\end{tabular}
+}
+\caption{SW4 data set - $1001\times1001\times276$ grid. SW4 simulation we consider generates two domains - we consider the larger domain for analysis. Each of these experiment configurations was executed for 2600 cycles using 384 MPI tasks distributed across 64 compute nodes. The timings in the table represent the average across all nodes and intervals of calculation. We used the value of h = 100. }
+\label{sw4_table}
+\end{table*}

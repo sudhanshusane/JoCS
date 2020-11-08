@@ -1,0 +1,32 @@
+\begingroup
+\setlength{\tabcolsep}{-3pt}
+%\renewcommand{\arraystretch}{0.5} % Default value: 1
+\setlength{\fboxsep}{1mm}
+\begin{table*}
+\centering
+\begin{tabular}{|P{2cm}|P{1.6cm}|P{2.3cm}|P{1.6cm} P{2.2cm} P{2.8cm} R|P{2.5cm}|}
+\hline
+Reduction & Interval & Particles/Rank & Step & Total In Situ & Simulation Time & DAV\% & Memory/Rank \\
+\hline
+\multirow{3}{*}{1:8} & 20 & \multirow{3}{*}{268k}  & 0.4475 & 268.5 & 2843 & 9.445 & \multirow{3}{*}{6.7 MB} \\
+\cline{2-2}\cline{4-7}
+& 40 & & 0.3221 & 193.2 & 2449 & 7.890 & \\
+\cline{2-2}\cline{4-7}
+& 60 & & 0.3838 & 230.3 & 2638 & 8.728 & \\
+\hline
+\multirow{3}{*}{1:27} & 20 & \multirow{3}{*}{79k}  & 0.1882 & 112.9 & 2700 & 4.181 & \multirow{3}{*}{2 MB} \\
+\cline{2-2}\cline{4-7}
+& 40 & & 0.1628 & 97.7 & 2485 & 3.931 & \\
+\cline{2-2}\cline{4-7}
+& 60 & & 0.1498 & 89.8 & 2600 & 3.457 & \\
+\hline
+\multirow{3}{*}{1:64} & 20 & \multirow{3}{*}{31k} & 0.0925 & 55.5 & 2516 & 2.207 & \multirow{3}{*}{0.7 MB} \\
+\cline{2-2}\cline{4-7}
+& 40 & & 0.1043 & 62.5 & 2466 & 2.537 & \\
+\cline{2-2}\cline{4-7}
+& 60 & & 0.083 & 49.8 & 2324 & 2.144 & \\
+\hline
+\end{tabular}
+\caption{In Situ Encumbrance for Cloverleaf 3D.  }
+\end{table*}
+\endgroup

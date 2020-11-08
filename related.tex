@@ -1,0 +1,189 @@
+\setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
+\setlength{\abovedisplayskip}{0pt} \setlength{\abovedisplayshortskip}{0pt}
+
+\subsection{Frames of Reference}
+%
+In fluid dynamics, there are two frames of reference to observe fluid motion: Eulerian and Lagrangian.
+%
+With the Eulerian frame of reference, the observer is in a fixed position.
+%
+With the Lagrangian frame of reference, the observer is attached to a fluid parcel and is moving through space and time.
+
+%
+When a flow field is stored in an Eulerian representation, it is typically done by means of its velocity field.
+%
+A velocity field $v$ is a time-dependent vector field that maps each point $x\in \mathbb R^d$ in space to the velocity of the flow field for a given time $t\in \mathbb R$
+%
+\begin{eqnarray}
+{v} : \mathbb R^d \times \mathbb R \to \mathbb R^d,\; x,t \mapsto v(x,t)
+\end{eqnarray}
+
+%In a practical setting, the vector field is defined over a fixed, discrete mesh and represents the state of the flow field at a specific instant of time or time slice, i.e., at a specific simulation time and cycle.
+%
+In a practical setting, a flow field at a specific time/cycle is defined as a vector data on a fixed, discrete mesh.
+%
+Time-varying flow is represented as a collection of such data over a variety times/cycles.
+
+
+When a flow field is stored in a Lagrangian representation, it is done by means of its flow map $F_{t_0}^{t}$.
+%
+The flow map is comprised of the starting positions of massless particles $x_0$ at time $t_0$ and their respective trajectories that are interpolated using the time-dependent vector field.
+
+Mathematically, a flow map is defined as the mapping
+\begin{eqnarray}
+F_{t_0}^{t}(x_0):\mathbb R \times \mathbb R \times \mathbb R^d \to \mathbb R^d,\; t \times t_0 \times x_0 \mapsto F_{t_0}^{t}(x_0) = x(t)
+\end{eqnarray}
+%
+of initial values $x_0$ to the solutions of the ordinary differential equation
+%
+\begin{eqnarray}
+\frac{d}{dt}x(t) = v(x(t),t)
+\end{eqnarray}
+
+In a practical setting, the flow map is represented as sets of particle trajectories calculated in the time interval $[t_0,t]\subset \mathbb R$.
+%
+The stored information, encoded in the form of known particle trajectories (i.e., a Lagrangian representation), encodes the behavior of the time-dependent vector field over an interval of time.
+%
+
+Although the frames of reference are theoretically equivalent~\cite{bujack2015lagrangian}, their application in practical settings varies. 
+%
+Our interest with this study is the practical setting, specifically for the \textbf{EUS} problem.
+%
+
+
+\subsection{In Situ Reduction via Lagrangian Representations}
+As referenced in the introduction, Agranovsky et al.~\cite{agranovsky2014improved}
+presented the first work on applying \textbf{L-ISR-PHE} to \textbf{EUS}.
+%
+Their work compared to a traditional Eulerian approach, i.e., saving cycles at regular
+intervals and calculating pathlines using temporal interpolation.
+%
+Their findings demonstrated significant benefits, for example 12X improvements in accuracy
+using the same storage, as well as the same accuracy for 64X less storage.
+%
+The key intuition behind these results is that the Lagrangian representation captures the
+ behavior of the flow field over an interval of time, as opposed to the state at a single time slice, and 
+thus is able to store more information per byte with respect to \textbf{EUS}.
+%
+%Despite highlighting the promise of \textbf{L-ISR-PHE}, the Agranovksy et al. work also had shortcomings.
+%
+%As already mentioned, one shortcoming was a lack of evaluation on \textit{in situ} encumbrance, 
+%which was not possible since they did not perform \textit{in situ} experiments.
+%
+%Another shortcoming was in evaluation, as their metrics only showed results relative to the traditional
+%Eulerian approach, creating uncertainty about whether or not the absolute errors were significant.
+%
+%Finally, their strategy for placing particles was to use uniform placement, terminated at uniform intervals.
+%
+
+Subsequent research studies have broadened the understanding and exploration of the \textbf{L-ISR-PHE} paradigm.
+%
+Sane et al.~\cite{sane2018revisiting} evaluated the \textbf{L-ISR-PHE} workflow for a range of spatiotemporal configurations operating on a fixed storage budget and provided absolute error estimates. 
+%
+Most recent research has explored sampling strategies for particle trajectories that form the Lagrangian representation.
+%
+Sane et al.~\cite{sane2019interpolation} explored the use of longer trajectories and 
+%a Delaunay triangulation-based method to 1) identify candidate locations to introduce new particles, or 2) terminate existing trajectories.
+%
+%Additionally, they
+proposed an interpolation scheme to reduce error by evaluating neighborhoods across interpolations.
+%
+Rapp et al.~\cite{rapp2019void} applied their void-and-cluster sampling technique to identify a representative set of scattered particles and found that it performs better than random sampling. 
+%
+To address scalability challenges, Sane et al.~\cite{sane2020scalable} explored an accuracy-performance tradeoff and demonstrated the use of a communication-free model that only stored trajectories that remain within the rank domain during the interval of computation.
+%
+
+%Although these studies have advanced the state of the art, none of these works inform the cost of \textbf{L-ISR-PHE} on a modern supercomputer.
+%
+%Assuming a tightly coupled in situ integration, the simulation code and in situ routine swap control of compute resources every cycle to compute a Lagrangian representation.
+%
+%This requires performing a single particle advection step for every particle every cycle.
+%
+%Critically, this is unlike previous particle advection studies that load particles into memory once and perform thousands of steps.
+%
+%The in situ phase utilizes access to the complete spatial and temporal resolution of the simulation vector field to accurately calculate sets of particle trajectories, i.e., a Lagrangian representation of the vector field.
+%
+%
+%Further, the in situ encumbrance is closely related to the number of particles (directly impacts storage and integrity) and the parallelization hardware.
+%
+%Unlike most particle advection studies, operating in situ requires returning control of compute resources to the simulation after every step.
+%
+%Further, varying the number of particles used affects the integrity of the reconstruction.
+%
+%Using a greater number of particles to sample the domain costs more in storage, runtime memory, and execution time, but provides high reconstruction integrity.
+%
+%On the other hand, using less particles costs less in storage, runtime memory, and execution time, but provides worse reconstruction integrity.
+%
+%Assessing the in situ encumbrance introduced by varying workloads is critical to understand the viability of calculating a Lagrangian representation for a large time-dependent simulation vector field.
+%
+%\fix{So all we are doing is evaluating in situ encumbrance?}
+
+%\fix{In Section~\ref{sec:isr_evaluation_criteria}, we propose evaluation criteria for \textit{in situ}
+%encumbrance.
+%While these prior works have informed critical components of the \textbf{L-ISR-PHE} workflow,
+%we feel none significantly inform these evaluation criteria, which has been a critical barrier to adoption.}
+
+
+\subsection{Lagrangian Extract-Based Post Hoc Exploration}
+The notion of calculating particle trajectories for a scientific simulation ``online'' for ``offline'' exploration was first explored by Vries et al.~\cite{vries2001calculating} in the context of ocean circulation models.
+%
+Next, Hlawatsch et al.~\cite{hlawatsch2011hierarchical} proposed a pathline interpolation technique that employs a hierarchical scheme and assumes access to the data across multiple time steps.
+%
+The technique constructs longer, more accurate trajectories by decreasing the number of integration steps when using previously computed particle trajectories.
+%
+Chandler et al.~\cite{chandler2015interpolation} proposed a modified k-d tree as a search structure and an interpolation technique for Lagrangian data extracted from an SPH simulation.
+%
+Further, Chandler et al.~\cite{chandler2016analysis} conducted error analysis studies and identified correlations between Lagrangian-based interpolation error and divergence in the flow field.
+%
+Bujack et al.~\cite{bujack2015lagrangian} evaluated the use of parameter curves to fit interpolated pathline points to improve the aesthetic of trajectories calculated using Lagrangian data.
+%
+Hummel et al.~\cite{hummel2016error} provided theoretical error bounds for error propagation and accumulation that can occur when calculating pathlines using Lagrangian data. 
+%
+With respect to adoption of ~\textbf{L-ISR-PHE}, 
+Agranovsky et al.~\cite{agranovsky2014improved}'s introduced a scheme, although their interpolation
+was straightforward since their \textit{in situ} scheme place particles at uniform locations
+and terminating them at regular intervals.
+Recently, Pascal et al.~\cite{envirvis.20171099,siegfried2019tropical} used extracted Lagrangian data from an ocean modeling simulation to explore coastal upwelling activity and visualize a derived scalar field representing pathline density.
+
+%\fix{In Section~\ref{sec:phe_evaluation_criteria}, we propose evaluation criteria for \textit{post hoc}.
+%While previous studies have answered questions about inferring new pathlines from existing pathlines,
+%only the Agranovsky et al. work considered accuracy from the \textbf{L-ISR-PHE} workflow.  
+%A key differentiator for our empirical study is that we consider real supercomputing applications
+%at scale, as opposed to the previous study which included analytical data and desktop-level simulations.
+%As a result, we feel our findings will be more persuasive to the broader community about the efficacy
+%of \textbf{L-ISR-PHE}.}
+
+
+
+\subsection{Other Relevant Research}
+Within the vector field analysis and visualization community, Lagrangian methods have been increasingly used in the past decade.
+%
+Lagrangian coherent structures (LCS) are a popular technique to visualize attracting and repelling surfaces and were introduced by Haller et al~\cite{haller2001distinguished, haller2000lagrangian, haller2000finding}.
+%
+The interest in the technique led to multiple efforts that were aimed at accelerating the computation and visualization of LCS~\cite{garth2007efficient,garth2009visualization,sadlo2007efficient,sadlo2011time}.
+%
+LCS have also been used for uncertain transient vector field visualization by Guo et al.~\cite{guo2016finite}.
+%
+
+Finally, multiple works have proposed vector field reduction strategies while maintaining an Eulerian representation.
+%
+Lodha et al.~\cite{lodha2000topology} controlled the compression of similar vectors into single vectors representing larger area.
+%
+Further, Lodha et al.~\cite{lodha2003topology} proposed a top-down topology preserving compression technique.
+%
+Theisel et al.~\cite{theisel2003combining} computed critical points and viewed the task as a mesh reduction, and later provided a threshold to filter important features~\cite{theisel2003compression}.
+%
+Each of these studies performed compression on the vector field of a single time step.
+%
+With the objective of highlighting temporal features of the vector field, Tong et al.~\cite{tong2012salient} compressed the total amount of data steps stored by identifying key time steps.
+%
+Although these techniques could be used to reduce data and store more frequently, these approaches don't inherently address the challenge of increasing temporal sparsity.
+%Although these techniques are valuable, they do not sufficiently address the challenge of increasing temporal sparsity.
+%
+%\fix{I think we need a better statement here --- could reduce to get higher temporal sparsity.  And yet don't want to compare with that.}
+%For a baseline comparison in our empirical study, we store data in an Eulerian representation at full resolution and use temporal subsampling.
+
+
+
+%This paper presents an empirical study of the in situ encumbrance and performance tradeoffs when executing \textit{in situ Lagrangian analysis} in a practical setting, i.e., in situ on a supercomputer.
+

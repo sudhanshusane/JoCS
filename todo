@@ -1,0 +1,50 @@
+
+Abstract: perhaps we revisit
+
+== Intro ==
+
+- Hank reviews new version
+- Add perspective: how unsteady flow vis affects Eulerian.
+"The result of this is that a velocity field interpolation using the traditional
+method has to do a temporal interpolation, and this temporal interpolation is occurring
+over increasing large times, which can introduce error."
+- Revisit contributions in the final paragraph and audit for what statements make sense to the reader who has just read the intro and which ones do not.  The ones that do not should go in the conclusion.
+
+
+== Section 3 ==
+
+3.1: Workflow overview
+Formula:
+Theoretical
+Practical
+Metrics
+3.1.1: In situ reduction
+\textbf{Theoretical Perspectives:}
+\textbf{Practical Perspectives:}
+\textbf{Evaluation Metrics:}
+3.1.2: Data storage
+3.1.3: Post hoc exploration
+3.2: Comparator
+3.3: Factors
+
+4.1: light edits to indicate parameter space has been moved up
+4.1: table 1 -- better represent SW4
+4.1.2: move to 3.5
+4.1.1: promote to its own subsection (not subsubsection)
+4.2: sore point.  Let's see how we are doing on space.
+4.4.2 & 4.4.3: swapped and re-oriented towards evaluation metrics in 3.2 and 3.3.
+
+Section 5: text re-organized: 5.1 is in situ encumbrance, 5.2 is post hoc efficacy
+Section 5: Combine Tables 5, 6, 7.
+Section 5: small multiples plots -- remove axes, bigger, etc. 
+
+Section 6: need conclusion
+
+possible new table:
+			# particles	interval	grid size	concurrency	
+EM-IS1: execution time   more		???		???		no change
+EM-IS2: memory		 more	
+EM-DS1: bytes
+EM-DS2: time
+EM-PH1: execution time
+EM-PH2: accuracy

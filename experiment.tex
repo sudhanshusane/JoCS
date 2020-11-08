@@ -1,0 +1,236 @@
+The objectives of our empirical study are the following:
+\begin{itemize}
+\item \textbf{OBJ1:} To evaluate the encumbrance (execution time, memory, storage) of \textbf{L-ISR} on both GPU and CPU on a modern supercomputer.
+\item \textbf{OBJ2:} To evaluate the efficacy of \textbf{L-ISR-PHE} for the \textbf{EUS} problem.
+\end{itemize}
+%
+%Our empirical study evaluates and presents: 1) in situ encumbrance for varying particle workloads, and 2) a detailed quantitative evaluation of the Lagrangian representation.
+%%
+%Thus, we conduct experiments to measure both.
+%%
+%Each experiment reports the costs of in situ extraction of a Lagrangian representation. 
+%%
+%For tests that are measuring reconstruction quality, a post hoc reconstruction phase is involved.
+%%
+%We do not perform post hoc reconstruction in a limited set of cases due to a limited compute node-hour allocation.
+
+In the following subsections, we describe all the components of our empirical study.
+%
+We discuss the infrastructure and implementations we use~(\ref{sec:infra}), the runtime environment specifics~(\ref{sec:runtime}), the parameter space we explore~(\ref{sec:parameters}), the simulation codes~(\ref{sec:datasets}), and finally, our evaluation of in situ encumbrance~(sec:encumbrance) and reconstruction accuracy~(\ref{sec:evaluation}).
+%
+Table~\ref{table:notation} provides a list of notations we use in this empirical study (Step, DAV\%, Interval, 1:X, L-ISR-PHE, EUS, Avg$_{L2}$, Max$_{L2}$).
+
+
+\subsection{Infrastructure and Implementation}
+\label{sec:infra}
+\subsubsection{In Situ}
+\label{sec:insituimp}
+\input{insitu.tex}
+\subsubsection{Post Hoc}
+\input{posthoc.tex}
+
+\subsection{Runtime Environment}
+\label{sec:runtime}
+Our empirical study used two machines: Summit and Alaska. 
+%
+Summit is a supercomputer at ORNL. 
+%
+A Summit compute node has two IBM Power9 CPUs, each with 21 cores running at 3.8 GHz and 512 GBytes of DDR4 memory. 
+%
+Nodes on Summit also have enhanced on-chip acceleration with each CPU connected via NVLink to 3 GPUs, for a total of 6 GPUs per node. 
+%
+Each GPU is an NVIDIA Tesla V100 with 5120 CUDA cores, 6.1 TeraFLOPS of double precision performance, and 16 GBytes of HBM2 memory.
+%
+Lastly, it uses a Mellanox EDR 100G InfiniBand, Non-blocking Fat Tree as its interconnect topology.
+
+Alaska is the small cluster at our research lab.
+%
+The head node with consists of two Intel Xeon E5-2667v3 CPU, each with 16 cores running at 3.2 GHz. 
+
+We use Summit to build, integrate, and execute in situ Lagrangian analysis with simulation codes.
+%
+Thus, all of our in situ extraction is performed on Summit. 
+%
+Additionally, we use Summit to perform large distributed memory post hoc reconstructions.
+%
+We use Alaska for the smaller post hoc reconstruction processes.
+
+
+\subsection{Parameter Space}
+\label{sec:parameters}
+
+We vary the different ``knobs'' in the parameter space to evaluate the viability and efficacy of using in situ Lagrangian analysis to perform exploratory time-dependent vector field analysis and visualization. 
+%
+We consider the following parameters:
+\begin{itemize}
+\item \textbf{Number of particles:} Our study varies the number of particles initialized per node and thus inform the cost of performing particle advection for varying workloads every cycle of the simulation. Further, the number of particles initialized is directly impacts the size of the data stored to disk and the accuracy of the reconstruction.
+%
+We specify the number of particles initialized using the notation \textbf{1:X}, where X is the reduction factor. 
+%
+For example, a 1:1 configuration states that one particle is used for every grid point (no reduction) and a 1:8 configuration states that one particle is used for every 8 grid points (12.5\% of the original data size). 
+%
+\item \textbf{Interval:} We consider the interval or frequency at which files are stored to disk. 
+%
+For a given total number of simulation cycles, this impacts the total amount of data stored to disk. 
+%
+Additionally, for the Lagrangian representation, the interval is directly related to the integration length of each massless particle. 
+%
+For each configuration, we specify the number of cycles between storing to disk and refer to this as the \textbf{interval}. 
+%
+\item \textbf{Simulation code:} We consider three different time-dependent vector fields produced by simulation codes. Further, we vary the size of the simulation code to gauge the variation in cost for in situ Lagrangian analysis. 
+\item \textbf{Scale and Parallelization Hardware:} We consider the costs at various scale (i.e., number of compute nodes, MPI ranks). Further, the simulation codes required different parallelization hardware and thus, across simulation codes we demonstrate in situ Lagrangian analysis using, both, GPU and CPU for particle advection.
+\end{itemize}
+
+%Most of our experiment test configurations have two phases: in situ and post hoc. 
+%
+%The performance characteristics of the in situ phase is what we are primarily interested in.
+%
+%We execute extra ``only-extraction'' configurations to gauge in situ performance and that do not continue to the post hoc phase.
+%
+%The post hoc phase in our study is used to measure accuracy.
+%
+%We report timings associated with performing post hoc Lagrangian reconstruction on a single node and in a distributed memory setting.
+%
+%We strongly believe that as in situ Lagrangian representations evolve, the post hoc techniques used will as well.
+%
+%Currently, to the best of our knowledge there does not exist a perfect one-size-fits-all post hoc Lagrangian-based advection method.
+
+%\input{sw4_vis.tex}
+%\input{pathlines_clover.tex}
+%\input{pathlines_nyx.tex}
+\input{combined_vis.tex}
+\subsection{Datasets}
+\label{sec:datasets}
+For our study we consider three simulation application codes that are used and/or developed as part of the Exascale Computing Project efforts.
+%
+
+First, we use Cloverleaf3D which is a three-dimensional mini or proxy ECP application that solves compressible Euler equations in a hydrodynamics setting on a Cartesian grid using an explicit second-order method~\cite{cloverleaf3d}. 
+%
+Cloverleaf3D has been used developed and used by several studies to evaluate emerging architectures and various techniques targeting Exascale applications.
+%
+The simulation is initially relatively stable and begins with an energy bar expanding from the center of the XY plane along the Z-axis. 
+%
+Figure~\ref{fig:pathlines_clover} show pathlines calculated in the Cloverleaf3D domain that show this initial behavior in the simulation.
+
+Next, we consider the SW4 seisomology simulation~\cite{petersson2015wave}.
+%
+This is an ECP application developed to study seismic wave propagation.
+%
+It operates and produces multiple domains with a time-dependent displacement field depending on the input deck provided to it.
+%
+We operate on a single domain and use the displacement vector field as input to our in situ Lagrangian operator.
+%
+Figure~\ref{fig:sw4_vis} is generated by visualizing the displacement magnitude of the particle trajectories extracted over the first X cycles of one of our simulation runs. 
+%
+The visualization uses line contours, with each node selecting 10 isovalues for the range of displacement magnitude in the node.
+%
+The color map range is the same for the entire domain, i.e., all nodes use the same maximum and minimum values.
+%
+
+The last data set we consider is the Nyx cosmology simulation~\cite{almgren2013nyx}, another ECP application.
+%
+The simulation's hydrodynamics is based on a compressible flow formulation in Eulerian coordinates. 
+%
+We built an Lya executable used to model Lyman-alpha forest in quasar spectra.
+%
+For this simulation, we derived the velocity field using the fields of momentum and density.
+%
+Figure~\ref{fig:vectorfield_nyx} shows a slice of the Nyx vector field at two time slices.
+%
+We observed that the unit vectors at each grid point remain relatively the same across all cycles.
+%
+The evolution of the vector field is in terms of velocity magnitude.
+%
+The maximum velocity magnitude in the domain increases steadily for every cycle of the application we simulated.
+%
+Further, Figure~\ref{fig:pathlines_nyx} is a visualization of the volume of the domain using 100,000 randomly seeded pathlines integrated for the first 25 cycles of the simulation.
+%
+\input{vectorfield_nyx.tex}
+
+
+\subsection{In Situ Encumbrance}
+\label{sec:encumbrance}
+
+To evaluate the encumbrance placed on a simulation code, we measure and vary the various parameters that impact the cost associated with our implementation of in situ Lagrangian analysis.
+
+\subsubsection{Computation and Memory Cost}
+
+In situ Lagrangian analysis involves particle advection each cycle of the simulation. 
+%
+This introduces an overhead that depends on the complexity of the operation (we consider a simple approach; feature extraction or more complex seed placement would incur a cost), the implementation of particle advection, the number of particles being advected, and the underlying hardware.
+%
+Further, there are additional factors like number of MPI ranks on a node, the use of shared memory on a node, etc. 
+%
+For our study, we state when this is the case, i.e., multiple MPI ranks are operating on a single compute node.
+%
+We measure and report the average cost of particle advection per \textbf{Step} in terms of wall time and as a percentage of simulation time or DAV\%. 
+%
+This cost is averaged across all ranks and includes the costs of memory allocation and transfer.
+%
+Further, in situ Lagrangian analysis involves maintaining the state (current position) of particles in memory. 
+%
+We report the memory cost incurred on every MPI rank or compute node.
+
+\subsubsection{I/O Cost}
+In this empirical study, we do not report or factor the cost of I/O. 
+%
+We discuss our reasoning for this below. 
+
+When writing to a binary format we observed very fast write times on Summit. 
+%
+Summit is designed to provide low access latency and high bandwidth. 
+%
+We found that a binary file of size 200 MB can be written in 0.0231 seconds on a single compute node running a single MPI task. 
+%
+And it takes 0.171 seconds of wall time for 6 MPI ranks to each write 200 MB files in parallel. 
+%
+In our experiments the largest file stored to disk by a single rank for a single interval or cycle is 115 MB. 
+%
+The range of sizes varies from 0.5 MB to 115 MB per node per instance of storing to disk (0.002 to 0.04 seconds, respectively). 
+%
+We provide some of these timings for reference in Table~\ref{table_binary}.
+\input{table_binary.tex}
+%
+Further, this infrequent operation and small cost of I/O in comparison 
+to the cost of a particle advection step which is performed each cycle is small.
+
+Although write times may be impacted at full scale --- all the nodes with several MPI ranks each trying to write at the same time - a study of this scale is beyond the scope of this work and more oriented toward a supercomputer I/O performance study. 
+%
+Further, in our relatively small study to inform ourselves, we found noise that we attribute to the cluster running hundreds of jobs simultaneously to be significant. 
+
+Further, since \textbf{L-ISR} in intended to be used as a data reduction operator, the sizes of files written to disk would be approximately the same size (1:1) or significantly smaller (1:8, 1:27, 1:64). 
+%
+If I/O costs were to be impacted, either due to scale or file format type, then the cost of Eulerian would be more adversely affected if compared against a reduced Lagrangian I/O cost. 
+%
+
+Another point to consider is the infrastructure performing the operation of storing data. 
+%
+Depending on whether the data is being written to a burst buffer or some staging platform before moving data to permanent storage can significantly alter the value of these timings. 
+
+All this being said, at scale scientists will not choose to save all the data due to excessive storage costs and since this would then indeed introduce a large cumulative encumbrance. 
+%
+Instead, they resort to temporal subsampling, i.e., saving data out at a predetermined frequency or at select cycles. 
+%
+One of our key assumptions is that as data sizes get larger, scientists will be forced to save less frequently or to store reduced data sets. 
+
+\subsection{Accuracy Evaluation}
+\label{sec:evaluation}
+Our empirical study measures time-dependent vector field reconstruction error by evaluating the accuracy of test particles trajectories interpolated using the extracted Lagrangian representation.
+%
+For our Cloverleaf3D and Nyx experiments, we randomly place 100,000 and 50,000 test particles in the domain respectively.
+%
+For the SW4 experiments, we place 90,000 test particles in between $Z=5000$ and $Z=15,000$.
+%
+
+Our empirical study measures the L2-norm, i.e., the Euclidean distance, for each interpolated point and compares it to a ground truth that is precomputed using the complete simulation data. 
+%
+We use Avg$_{L2}$ to denote the average L2-norm and Max$_{L2}$ to denote the maximum L2-norm for an individual particle trajectory.
+%
+We note, that we observed in most cases, the Max$_{L2}$ was closely related to the end point distance between the ground truth and test particle trajectories.
+%
+
+An overall average of Avg$_{L2}$, denoted by AvgN$_{L2}$, is measured across $N$ test particle samples and provides a robust statistic~\cite{agranovsky2014improved, sane2018revisiting, sane2019interpolation, rapp2019void}.
+%
+Unlike AvgN$_{L2}$, a maximum error is more susceptible to outliers that could arise from small but complex regions of flow.
+%
+To provide a more detailed quantitative analysis compared to prior work, our empirical study uses histograms to capture the distribution of error~(Avg$_{L2}$, Max$_{L2}$) across all test particles and provides insight into per particle outcomes.  

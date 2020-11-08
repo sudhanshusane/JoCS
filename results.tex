@@ -1,0 +1,95 @@
+We evaluated \textbf{L-ISR-PHE} using seismic wave propagation, cosmology, and proxy ECP hydrodynamics simulations~(Section~\ref{sec:datasets}) for two aspects: (1) \textit{in situ} encumbrance under varying workloads~(Section~\ref{sec:results_insitu}); and (2) \textit{post hoc} efficacy for various configurations~(Section~\ref{sec:results_posthoc}).
+%\input{sw4_vis.tex}
+%\input{pathlines_clover.tex}
+\input{timings.tex}
+
+\subsection{In Situ Encumbrance}
+\label{sec:results_insitu}
+%\input{cloverleaf_histograms.tex}
+\input{results_insitu.tex}
+%\input{cloverleaf_histograms.tex}
+%\input{histogram_plots.tex}
+
+\subsection{Post Hoc Efficacy}
+\label{sec:results_posthoc}
+\input{results_posthoc.tex}
+%\input{histogram_plots.tex}
+%\input{accuracy.tex}
+
+
+
+
+%\input{sw4_histograms.tex}
+%\input{nyx_histograms.tex}
+%\subsection{Cloverleaf3D Hydrodynamics Proxy Application}
+%We simulated a $586^3$ Cloverleaf3D simulation for 600 cycles using 96 MPI tasks across 16 nodes.
+%%
+%With respect to \textbf{L-ISR} configurations, we ran the cross product of 3 options for number of particles (1:8, 1:27, 1:64) and 3 options for interval (20, 40, 60 cycles).
+%%
+%Our integration with Cloverleaf3D allowed us to use 6 GPUs per compute node to perform parallel particle advection. 
+%%
+%Each MPI rank was allocated a single GPU and operated on approximately 2.1 M grid points.
+%%
+%We used a fixed advection step size of 0.0045.
+%%
+%In total, we run the Cloverleaf3D simulation ten times: nine for Lagrangian + one for Eulerian.
+%
+%\subsubsection{In Situ Encumbrance}
+%\subsubsection{Accuracy Evaluation}
+%\input{cloverleaf_histograms.tex}
+%%\input{cloverleaf_accuracy.tex}
+%
+%\subsection{SW4 Seismic Wave Propagation Modeling Simulation}
+%We conduct two sets of experiments using the SW4 simulation.
+%
+%For \textbf{OBJ1}, we run SW4 seven times.
+%%
+%We vary the number of compute nodes used and the workload each GPU is responsible for.
+%%
+%First, we consider in situ encumbrance on a single compute node with 6 MPI tasks (each using 1 GPU), and 3 simulation grid sizes (each being sampled using 1:8 particles).
+%%
+%Second, we consider in situ encumbrance when executing on 64 compute nodes with 384 MPI tasks (each using 1 GPU), and 2 simulation grid sizes with varying number of particles.
+%%
+%For each run, we measure the in situ encumbrance over a large enough number of cycles to ensure a representative result (at least 800 cycles and upto 2600 cycles).
+%%
+%The results of these experiments are discussed in Section~\ref{sw4_insitu}.
+%
+%For \textbf{OBJ2}, we run SW4 five times: four for Lagrangian + one for Eulerian.
+%%
+%We configure SW4 to produce a $251\times251\times70$ mesh and execute for 2000 cycles.
+%%
+%We use a single compute node and launch 6 MPI tasks, each allocated a single GPU.
+%%
+%Each compute node operates on approximately 766,000 points and we store data at an interval of 250 cycles.
+%%
+%For these experiments, we consider 4 options for the number of particles used to sample the domain (1:1, 1:8, 1:27, 1:64).
+%%
+%The results of these experiments are discussed in Section~\ref{sw4_accuracy}.
+%
+%
+%\subsubsection{In Situ Encumbrance}
+%\label{sw4_insitu}
+%\subsubsection{Accuracy Evaluation}
+%\label{sw4_accuracy}
+%%\input{sw4_accuracy.tex}
+%\input{sw4_histograms.tex}
+%
+%\subsection{Nyx Cosmology Simulation}
+%We use two simulation sizes for the Nyx cosmology simulation: $64^3$ and $128^3$. 
+%%
+%We refer to these as Nyx$_{Small}$ and Nyx$_{Medium}$, respectively.
+%%
+%Each Nyx run on Summit executed using a single node, single MPI rank, and CPU OpenMP for parallelism.
+%%
+%Simulations running using a $64^3$ domain completed 400 cycles and those using a $128^3$ domain completed approximately 75 cycles in one compute hour.
+%%
+%We experimented with the cross product of three options for storage (1:1, 1:8, 1:27) and two options for interval (25, 50 cycles) for both simulation sizes.
+%
+%\subsubsection{In Situ Encumbrance}
+%\subsubsection{Accuracy Evaluation}
+%\input{nyx_histograms.tex}
+%%\input{nyx_accuracy.tex}
+%
+%\subsection{Distributed-Memory Post Hoc Reconstruction Costs}
+%\input{reconstruction_table.tex}
+%

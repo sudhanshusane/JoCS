@@ -1,0 +1,152 @@
+The notion of calculating particle trajectories for a scientific simulation ``online'' for ``offline'' exploration was first explored by Vries et al.~\cite{vries2001calculating} in the context of ocean circulation models.
+%
+More recently, motivated by the large data analysis and visualization~(DAV) challenges on modern supercomputers, Agranovsky et al.~\cite{agranovsky2014improved} conceptually explored the use of a reduced Lagrangian representation of a time-dependent vector field.
+%
+The proposed data reduction technique would operate in situ~(``online'') alongside the simulation and calculate particle trajectories using the complete spatial and temporal resolution of the simulation.
+%
+The reduced data could then be reconstructed post hoc~(i.e., ``offline'') to support the exploration DAV use case.
+%
+Although the findings showed improved post hoc~(i.e., ``offline'') exploration capabilities (greater integrity and reduced data size), it was demonstrated in a theoretical in situ setting, i.e., data set files were loaded from disk to mimic a simulation.
+%
+Several research studies following the work by Agranovsky et al.~\cite{agranovsky2014improved} have furthered the state of the art in terms of adoption~\cite{envirvis.20171099,siegfried2019tropical}, error analysis~\cite{bujack2015lagrangian, hummel2016error, chandler2016analysis}, accuracy-storage propositions~\cite{sane2018revisiting}, sampling strategies~\cite{rapp2019void, sane2019interpolation}, search structures and interpolation techniques~\cite{chandler2015interpolation, sane2019interpolation}. 
+%
+However, none of these works have provided a focused study of the cost and technical performance characteristics of calculating a Lagrangian representation of a time-dependent vector field on a supercomputer and integrated with a simulation as an in situ data reduction operator.
+%
+In this paper, we present an empirical study of the in situ encumbrance and performance tradeoffs when executing \textit{in situ Lagrangian analysis} in a practical setting, i.e., in situ on a supercomputer.
+
+In situ Lagrangian analysis utilizes access to the complete spatial and temporal resolution of the simulation vector field to accurately calculate sets of particle trajectories, i.e., a Lagrangian representation of the vector field. 
+%
+However, this requires performing a particle advection step for every particle every cycle.
+%
+Assuming a tightly coupled in situ integration, i.e., simulation code and DAV routines share the same resources, the in situ encumbrance would depend on the number of particles and the parallelization hardware.
+%
+Unlike most particle advection studies, operating in situ requires returning control of compute resources to the simulation after every step.
+%
+Further, varying the number of particles used affects the integrity of the reconstruction.
+%
+Using a greater number of particles to sample the domain costs more in storage, runtime memory, and execution time, but provides high reconstruction integrity.
+%
+On the other hand, using less particles costs less in storage, runtime memory, and execution time, but provides worse reconstruction integrity. 
+%
+Assessing the in situ encumbrance introduced by varying workloads is critical to understand the viability of calculating a Lagrangian representation of a large time-dependent simulation vector field.
+%
+
+Our contributions in this paper are:
+\begin{itemize}
+\item An empirical study to evaluate the cost and understand the technical performance characteristics of in situ Lagrangian analysis on a modern supercomputer.
+\item A quantitative analysis of reconstruction integrity using multiple metrics and histograms.
+\item A qualitative analysis of reconstruction integrity using pathline visualizations.
+\item Preliminary costs of implementing a Lagrangian-based advection scheme for distributed-memory post hoc reconstruction.
+\end{itemize}
+
+
+
+
+
+
+%
+%would generate particle trajectories by accessing the complete spatial and temporal resolution on the simulation
+%
+%
+%However, this initial work (to the best of our knowledge) was almost two decades ago.
+%%
+%This concept has received increased interest in recent years, specifically, with respect to the use of a Lagrangian representation of a vector field
+%%
+%Exploratory and accurate time-dependent vector field data analysis and visualization 
+%
+%historically been a challenging task.
+%
+%
+%
+%This resurgence is largely attributed
+%
+%
+%
+%%
+%Large scientific simulation codes produces large amounts of data, not all of which can reasonably be stored to disk.
+%%
+%The lack of access to the complete spatial and temporal resolution of the simulation data has reduced the integrity of the data analysis and visualization of time-dependent vector fields.
+%%
+%In the past decade, several data analysis and visualization pipelines have had to react to the increasing gap between compute capability, i.e., our ability to generate large amounts of data, and our I/O capability, i.e., our ability to read, write and store data.
+%%
+%Operating on simulation data as it is generated, or \textit{in situ processing}, is an emerging paradigm has helps address this issue in one of two ways: 1) generate visualizations as the simulation generates data, or 2) process and reduce data for later exploration.
+%%
+%The first way is most useful when the desired data analysis and visualization is known a priori.
+%%
+%However, this approach is less useful for the exploratory use case, i.e., when there is no a priori knowledge about desired visualizations.
+%%
+%In this situation, i.e., the exploratory use case, storing a reduced data set appears to be viable path forward.
+%
+%
+%In situ Lagrangian analysis is one of few uniquely positions operators that performs data reduction of a vector field by operating on it every cycle. 
+%%
+%This also raises questions around the cost of in situ Lagrangian analysis. 
+%%
+%Performing particle advection for a 1000 steps is very different from performing particle advection for a 1000 steps, but giving up control of the hardware accelerators after each step.
+%%
+%It is important to understand the costs of these operations in settings involving a simulation. 
+%%
+%We do this in this empirical study.
+%
+%Exploratory analysis and visualization of time-dependent vector fields using traditional methods is increasingly challenging on modern supercomputers.
+%%
+%Modern supercomputing trends clearly show an increasing gap between computational and I/O capabilties, i.e., we can compute and generate far more data than we can reasonably save to disk.
+%%
+%The massive increase in compute power has enabled scientists to model phenomena of interest in far greater detail than we could previously.
+%%
+%The limited increase in I/O capabilities, however, increases the pressure on the data analysis and visualization pipeline.
+%%
+%To address the I/O bottleneck, scientists frequently resort to temporal subsampling, i.e., store data to disk less frequently or at select cycles.
+%%
+%To perform accurate exploratory data analysis and visualization, particularly of time-dependent data, requires access to the data, both spatial and temporal.
+%%
+%As the I/O gap continues to grow, sparse temporal subsampling using traditional methods will fail to maintain high integrity during time-dependent vector field analysis and visualization.
+%
+%
+%In situ processing has gained popularity in recent years as a potential solution to address the I/O bottleneck.
+%%
+%The in situ processing paradigm enables operations to be performed on the data \textit{in place}, i.e., in memory, and provides access to the complete spatial and temporal resolution of the simulation data.
+%%
+%Routines that operate in situ typically adopt one of two strategies: perform analysis and visualization routines directly or perform data reduction to enable post hoc exploratory analysis and visualization.
+%%
+%Both strategies aim to alleviate the burden on the I/O bandwidth.
+%%
+%In this paper, we will focus on an in situ data reduction routine for time-dependent vector field data. 
+%%
+%Time-dependent vector field data is transformed by calculating a reduced Lagrangian representation of the field and stored to disk.
+%%
+%The opportunity of in situ processing, however, comes at the cost of an encumbrance on the simulation code.
+%%
+%For an in situ method to be viable, it is critical this method operate within in situ constraints and remain within an allocated resource budget.
+%%
+%Failing to operate within constraints would adversely impact the performance of the simulation code, which could lead to further undesirable consequences. 
+%%
+%Thus, it is critical to understand the technical performance characteristics of an in situ routine in a practical setting, i.e., at scale on a modern supercomputer.
+%
+%The high cost of operating a modern supercomputer makes time on compute nodes a valuable resource.
+%%
+%Scientists will typically identify a percentage of time and memory that can be allocated for in situ data analysis and visualization routines.
+%%
+%Further, scientists can specify the frequency at which routines can perform computation and/or store data to disk, i.e., every cycle or every $X^{th}$ cycle ($X > 1$).
+%%
+%In situ data reduction by calculating a Lagrangian representation of the time-dependent vector field, or \textit{in situ Lagrangian analysis}, requires access to the simulation data every cycle and involves the computation of particle trajectories that track the displacement of a particle over time.
+%%
+%These operations require performing operations associated with particle advection and storing of particle information in memory. 
+%%
+%Our study evaluates the in situ cost by deploying this data reduction operator in a practical setting on a supercomputer. 
+%
+%Although multiple works have studied various aspects of using a Lagrangian representation, such as storage-accuracy propositions, error analysis, and interpolation, the practical cost of deploying this technique in a large-scale distributed environment and its impact on a simulation code has not been considered.
+%%
+%We present a 
+%
+%The concept of representing time-dependent vector field data using a Lagrangian representation was first explored for ocean and atmosphere general circulation models~\cite{}.
+%%
+%This technique was more recently applied as a data reduction operator by Agranovsky et al.~\cite{agranovsky2014improved}.
+%%
+%The study by Agranovsky et al. demonstrated significantly improved data storage-accuracy propositions could be achieved using this method.
+%%
+%Further, visual analysis of ocean model simulations using reduced Lagrangian representations of time-dependent vector field data demonstrate early adoption of this approach.
+%%
+%
+%
+% been explored 

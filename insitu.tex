@@ -1,0 +1,40 @@
+We use the Ascent~\cite{larsen2017alpine} \textit{in situ} infrastructure and VTK-m~\cite{moreland2016vtk} library to implement \textit{in situ} data reduction via by calculating a Lagrangian representation. 
+%
+%Lagrangian analysis is implemented as an extraction filter in VTK-m. 
+%
+%For each of the simulation codes we consider, Ascent is first integrated with the simulation code.
+%
+%Ascent can be configured to perform Lagrangian analysis when the simulation is executed.
+%
+%The specifics of an analysis configuration are input to Ascent using either a json or yaml file.
+%
+%The Lagrangian analysis filter requires parameters specifying seed resolution, frequency of storing information to disk, the name of the vector field, and step size.
+%%
+%Ascent passes the simulation velocity data to the Lagrangian filter via VTK-h~\cite{larsen2017alpine}, a distributed memory wrapper around VTK-m, every cycle. 
+%
+%Further, we use utilities within Ascent to measure timings and to strip simulation data of ghost zones.
+%
+The VTK-m Lagrangian filter on each rank operates independently and maintains its own list of basis particles and uses the existing particle advection infrastructure available in VTK-m~\cite{pugmire2018performance}.
+%
+RK4 particle advection is implemented using VTK-m worklets (kernels or functors) that offer performance portability by utilizing the underlying hardware accelerators. 
+%
+%The Lagrangian filter operates across simulation cycles and stores one value in memory for each basis flow seed particle: current position (x, y, z).
+%
+In our implementation, each Lagrangian filter stores the displacement of each particle (3 double), as well as its validity (1 boolean), i.e., whether the particle remained within the domain during the interval of calculation.
+%
+%The validity of a particle is essential to consider when searching for a valid interpolation neighborhood during post hoc reconstruction.
+%
+%Our implementation computes the displacement and validity using VTK-m worklets as a final step before adding both fields to the output data set object. 
+%
+In more complicated frameworks, it is possible to associate additional information (for example, ID, age, start location, previous locations, etc.) with each particle at the cost of higher runtime memory usage and data storage.
+%
+%For our study, we store data in a VTK ASCII file format for structured grids.
+%
+%Figure~\ref{} is a schematic diagram of the infrastructure and shows the relation of \textit{in situ} Lagrangian analysis to the simulation code.
+
+We use Ascent to store the complete velocity field at a specified frequency in order to evaluate the traditional Eulerian paradigm.
+%
+%Similar to the Lagrangian filter, we store data in a VTK ASCII file format for structured grids.
+%
+For every Eulerian configuration, we store the full spatial resolution of the simulation domain under consideration. 
+%

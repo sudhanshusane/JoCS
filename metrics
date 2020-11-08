@@ -1,0 +1,10 @@
+IS-M1: memory usage
+IS-M2: execution time
+IS-M3: ease of integration
+IS+PH-M1: file size
+IS+PH-M2: file format
+PH-M1: memory usage
+PH-M2: execution time
+PH-M3: accuracy
+
+Workload, BTO vs non-BTO.

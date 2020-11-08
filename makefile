@@ -1,17 +1,12 @@
+SRC :=$(wildcard *.tex *.bib)
 
-SHELL = /bin/sh
-
-all: sane_jocs.pdf
-
-sane_jocs.pdf: *.tex 
-	pdflatex sane_jocs
-	pdflatex sane_jocs
-	bibtex sane_jocs
-	touch sane_jocs.tex
-	pdflatex sane_jocs
-	pdflatex sane_jocs
-
+sane_jocs.pdf: $(SRC)
+	pdflatex sane_jocs.tex
+	bibtex sane_jocs.aux
+	pdflatex sane_jocs.tex
+	pdflatex sane_jocs.tex
 
 clean:
-	if (rm -f *.log *.aux *.bbl *.blg *.out *.toc *.dvi *.ps *.brf *.lbl sane_jocs.pdf) then :; fi
+	rm -f *.glo *.log *.dvi *.gls *.toc *.aux *.ist *.out *.glg sane_jocs.pdf *.bbl *.blg *.lof *.brf *.synctex.gz
 
+.PHONY: clean

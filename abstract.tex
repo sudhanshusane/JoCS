@@ -1,0 +1,44 @@
+We conduct an empirical study of \textbf{L-ISR-PHE}~(\textbf{L}agrangian-based \textbf{I}n \textbf{S}itu \textbf{R}eduction with \textbf{P}ost \textbf{H}oc \textbf{E}xploration), an in situ vector data reduction-based workflow to support exploration of sparsely sampled time-dependent vector field simulation data.
+%
+%We conduct an empirical study of in situ Lagrangian analysis, an in situ vector data reduction operator to support exploration of time-dependent vector field simulation data.
+%
+The use of Lagrangian representations in a reduced form has been conceptually explored to address data analysis and visualization for large-scale simulations because of the I/O and storage constraints. 
+%
+Although multiple research efforts have advanced the state of the art, those studies were demonstrated in theoretical in situ environments.
+%
+Thus, previous research lacks information pertaining to the technical performance characteristics and consequentially, the viability of \textbf{L-ISR-PHE} in practical in situ environments, i.e., integrated with a simulation and executing on a supercomputer.
+%
+The use of Lagrangian representations significantly improves accuracy-storage propositions for time-dependent vector field exploration by taking advantage of access to the complete spatial and temporal resolution from the simulation and encoding behavior over an interval of time.
+%
+Our empirical study contributes an evaluation of the in situ encumbrance, i.e., the cost, of performing in situ Lagrangian analysis in a practical setting.
+%
+We integrate our in situ infrastructure with three scientific applications and runs 47 tests on Summit.
+%
+In addition to measuring the technical performance characteristics under varying parameter configurations and workloads, we present a detailed quantitative evaluation of the extracted Lagrangian representation.
+%
+%Our empirical study demonstrates that for varying simulation cycle times, in situ Lagrangian analysis can be performed using up to Y particles per node for under Z\% time, while storing 40X less data and providing 10X greater accuracy. 
+%
+
+
+
+%\fix{The in situ extraction of Lagrangian representations of time-dependent vector fields is an important active area of research to enable exploratory data analysis and visualization. 
+%%
+%Although multiple studies have looked at aspects such as accuracy-storage propositions, error analysis, and interpolation techniques for Lagrangian methods, these studies remain conceptual, i.e., they are experiments in a theoretical settings and fail to provide real in situ encumbrance costs.
+%%
+%Thus, questions pertaining to the viability on a modern supercomputer for a large scale simulation code remain open.
+%%
+%In this paper, we present the findings of our empirical study that evaluates in situ encumbrance and technical performance characteristics of in situ Lagrangian analysis.
+%%
+%Our quantitative analysis of a time-dependent vector field visualization workflow includes the costs of in situ extraction of Lagrangian flows and the post hoc reconstruction of pathlines for exploratory analysis.
+%%
+%For our study, we consider three simulation codes associated with the Exascale Computing Project (ECP) and deploy Lagrangian analysis using widely recognized in situ infrastructure.
+%%
+%We integrate our implementation of in situ Lagrangian analysis with an Exascale miniapp hydrodynamics application Cloverleaf3D, ECP seisomology wave propagation modeling simulation SW4, and ECP cosmology simulation Nyx.
+%%
+%To gauge realistic costs we use compute nodes on the Summit~(OLCF) supercomputer. 
+%%
+%We evaluate and analyze the tradeoffs between in situ encumbrance of Lagrangian analysis on the simulation code and payoff in terms of improved analysis accuracy and reduced storage requirements.
+%%
+%Lastly, to establish the viability and efficacy of using Lagrangian representations of time-dependent vector fields, our empirical study considers the traditional Eulerian method as a baseline for comparison.
+%%
+%}

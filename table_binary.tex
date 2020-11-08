@@ -1,0 +1,29 @@
+\begin{table}[h]
+\centering
+\vspace{-2mm}
+\scalebox{0.9}{
+\begin{tabular}{||c||c|c||}
+\hline
+File Size (MB) &  1 MPI/Node~(s) & 6 MPI/Node~(s) \\
+\hline
+1 & 0.0018 & 0.0022 \\
+\hline
+%5 & 0.0016 & 0.01 \\
+%\hline
+10 & 0.0032 & 0.0045 \\
+\hline
+%20 & 0.0054 & 0.0078 \\
+%\hline
+50 & 0.0064 & 0.013 \\
+\hline
+100 & 0.0125 & 0.038 \\
+\hline
+200 & 0.0231 & 0.171 \\
+\hline
+\end{tabular}
+}
+\vspace{-2mm}
+\caption{Write time measurements for various file sizes (in binary format) to disk on Summit. We consider two cases: one MPI rank or six simultaneous MPI ranks each writing the file to disk on a single compute node. For each timing, we average over multiple runs and every timing is reported in seconds.}
+\label{table_binary}
+\vspace{-3mm}
+\end{table}

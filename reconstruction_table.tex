@@ -1,0 +1,21 @@
+\begingroup
+\begin{table}[!h]
+\centering
+\scalebox{0.9}{
+\begin{tabular}{|c|c|c|c|}
+\hline
+Samples & CGAL & Interpolation & Communication \\
+/Rank & Delaunay (s) & (s) & (s) \\
+\hline
+7.2M & 178 & 0.00246 & \multirow{3}{*}{0.00125} \\
+2.1M & 53 & 0.00141 & \\
+887k & 21 & 0.00093 & \\
+\hline
+\end{tabular}
+}
+\vspace{-3mm}
+\caption{Distributed memory \textit{post hoc} interpolation cost for 100,000 particles across a \textbf{single interval} of the Cloverleaf3D extracted data using 16 compute nodes and 96 MPI ranks on Summit. Values averaged over all reconstruction runs.}
+\label{table:reconstruction}
+\end{table}
+\endgroup
+

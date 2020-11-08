@@ -1,0 +1,62 @@
+We contribute an empirical study in response to uncertainty
+regarding whether or not the \textbf{L-ISR-PHE} workflow is practically viable and should be
+the preferred solution for the \textbf{EUS} setting.
+%
+%We endeavored to perform this empirical study in response to skepticism
+%regarding whether or not the \textbf{L-ISR-PHE} workflow should be
+%the preferred solution for the \textbf{EUS} setting.
+%
+Although previous works had demonstrated compelling propositions with respect
+to accuracy-storage tradeoffs, they had been mostly performed
+in theoretical \textit{in situ} environments.
+%
+%This research gap limits adoption by stakeholders. 
+This research gap concerning practical \textit{in situ} encumbrance and viability on a supercomputer is a barrier for adoption. 
+%
+Filling this research gap is the key contribution of our empirical study. 
+%
+We provide insight on this front by considering execution time, memory usage, and percentage of time spent by the simulation on \textit{in situ} processing.
+%
+Our key findings show that simulations almost always spent less than 10\% of time on \textit{in situ} processing and in some cases, less than 1\%.
+%
+For the \textit{post hoc} phase, our empirical study improves on prior evaluations of data storage-accuracy propositions: both quantitatively and qualitatively.
+%
+We present per particle outcomes using histograms and believe this representation accurately captures interpolation error changes across configurations.
+%
+For \textbf{EUS} settings, our experiments demonstrate significant data storage reduction~(8X-200X) while maintaining accuracy (in every case, particles remained within ground truth cell on average).
+%
+Further, we provide cost estimates for a Lagrangian-based distributed-memory \textit{post hoc} advection scheme.
+%
+%Further, prior works were limited into their considered only summaries to understand and present of \textit{post hoc} efficacy was incomplete.
+%
+%We feel this study provides clear evidence on both fronts:
+%\textit{in situ} encumbrance is acceptable and accuracy-storage
+%tradeoffs enabling \textit{post hoc} efficacy are maintained at higher
+%scale.
+%
+Overall, we believe this empirical study addresses the existing research gap 
+concerning \textit{in situ} encumbrance on a supercomputer and contributes to existing evaluations of \textit{post hoc} efficacy.
+%
+In turn, we hope the study enables additional adoption from stakeholders
+and future research on improved techniques.
+%
+%In terms of future work, we believe understanding utilization of compute resources in various in situ settings (e.g., loosely coupled, dedicated hardware, etc.) would be a value contribution. 
+%As a result, we feel that this study answers the skepticism regarding
+%\textbf{L-ISR-PHE}, and that this workflow should be used for \textbf{EUS}
+%problems over a traditional Eulerian approach.
+%
+%
+In terms of future work, we believe that research on \textit{in situ}
+extraction could lead to even better accuracy-storage tradeoffs,
+especially with respect to particle placement and termination, and with
+respect to increased resolution along a trajectory.
+%
+%We also revisit the comment from Section~\ref{sec:eval} that different
+%flow visualization techniques may be sensitive or insensitive to
+%the \textbf{L-ISR-PHE} paradigm.
+
+%Our contribution with this paper is an empirical study to understand the technical performance characteristics of \textbf{L-ISR-PHE} in a practical setting.
+%
+%Our study considered 3 simulation codes with diverse time-dependent vector fields and conducted experiments on Summit.
+%
+%We demonstrate that Lagrangian representations can be viably calculated in situ.

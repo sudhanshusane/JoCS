@@ -1,0 +1,37 @@
+\begin{table*}[!h]
+\centering
+%\resizebox{\linewidth}{!}{%
+\scalebox{0.8}{
+\begin{tabular}{||c||c|c|c||c|c||b|c|d|b||}
+\hline
+\textbf{Configuration} & \textbf{Average File Size} & \textbf{Average I/O} & \textbf{Total I/O} & \textbf{Average Filter} & \textbf{Total Filter} & \textbf{Total In Situ} & \textbf{Simulation Time} & \textbf{\% DAV} & \textbf{Memory/Rank} \\
+\hline
+Eulerian 20 & 89.9 MB & 94.83s & 2939.73s & NA & NA & 2939.73s & 5428s & 54.15\% & NA \\
+\hline
+Eulerian 40 & 92.7 MB & 97.12s & 1553.92s & NA & NA & 1553.92s & 4088s & 38.01\% & NA \\
+\hline
+Eulerian 60 & 89.8 MB & 94.66s & 1041.26s & NA & NA & 1041.26s & 3701s & 28.12\% & NA \\
+\hline
+Lagrangian 20, 1:8 & 12.1 MB & 9.73s & 291.94s & 0.4475s & 268.53s & 560.48s & 3135s & 17.87\% & 6.4 MB \\
+\hline
+Lagrangian 20, 1:27 & 3.6 MB & 2.8s & 84.21s & 0.1882s & 112.92s & 197.13s & 2785s & 7.07\% & 1.9 MB \\
+\hline
+Lagrangian 20, 1:64 &  1.4 MB & 1.1s & 33.11s & 0.0925s & 55.55s & 88.66s & 2550s & 3.47\% & 0.78 MB \\
+\hline
+Lagrangian 40, 1:8 &  12 MB & 9.64s & 144.65s & 0.3221s & 193.27s & 337.92s & 2594s & 13.02\% & 6.4 MB \\
+\hline
+Lagrangian 40, 1:27 &  3.6 MB & 2.78s & 41.77s & 0.1628s & 97.7s & 139.48s & 2527s & 5.51\% &  1.9 MB \\
+\hline
+Lagrangian 40, 1:64 &  1.4 MB & 1.1s & 16.52s & 0.1043s & 62.59s & 79.12s & 2483s & 3.18\% &  0.78 MB \\
+\hline
+Lagrangian 60, 1:8 &  12 MB & 9.72s & 97.22s & 0.3838s & 230.33s & 327.55s & 2736s & 11.97\% &  6.4 MB \\
+\hline
+Lagrangian 60, 1:27 &  3.6 MB & 2.78s & 27.88s & 0.1498s & 89.90s & 117.78s & 2628s & 4.48\% &  1.9 MB \\
+\hline
+Lagrangian 60, 1:64 &  1.4 MB & 1.1s & 11.07s & 0.08308s & 49.84s & 60.92s & 2335s & 2.60\% &  0.78 MB \\
+\hline
+\end{tabular}
+}
+\caption{Cloverleaf3D data set - $586^3$ grid. Each of these experiment configurations was executed for 600 cycles using 96 MPI tasks distributed across 16 compute nodes. The timings in the table represent the average across all nodes and intervals of calculation. Each node operates on a domain of approximates 2.1 M points.} 
+\label{clover_table}
+\end{table*}
